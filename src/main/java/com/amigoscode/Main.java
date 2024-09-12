@@ -2,6 +2,8 @@ package com.amigoscode;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -26,6 +28,22 @@ public class Main {
     public static void main(String[] args) {
         System.out.println(customers);
         SpringApplication.run(Main.class, args);
+    }
+
+    @GetMapping(path = "api/v1/customers")
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    @GetMapping(path = "api/v1/customers/{customerId}")
+    public Customer getCustomer(
+            @PathVariable("customerId") final Integer customerId) {
+        return customers.stream()
+                .filter(customer -> customer.id.equals(customerId))
+                .findFirst()
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Customer with id %s not found".formatted(customerId))
+                );
     }
 
     static class Customer {
