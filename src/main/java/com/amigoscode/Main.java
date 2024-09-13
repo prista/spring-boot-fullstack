@@ -11,10 +11,10 @@ public class Main {
         ConfigurableApplicationContext applicationContext
                 = SpringApplication.run(Main.class, args);
         // get all the beans managed for us
-        String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
-        for (String beanDefinitionName : beanDefinitionNames) {
-            System.out.println(beanDefinitionName);
-        }
+//        String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
+//        for (String beanDefinitionName : beanDefinitionNames) {
+//            System.out.println(beanDefinitionName);
+//        }
     }
 
 }
