@@ -1,20 +1,28 @@
 package com.amigoscode;
 
+import com.amigoscode.customer.Customer;
+import com.amigoscode.customer.CustomerRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+
+import java.util.List;
 
 @SpringBootApplication
 public class Main {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext applicationContext
-                = SpringApplication.run(Main.class, args);
-        // get all the beans managed for us
-//        String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
-//        for (String beanDefinitionName : beanDefinitionNames) {
-//            System.out.println(beanDefinitionName);
-//        }
+        SpringApplication.run(Main.class, args);
     }
 
+    @Bean
+    CommandLineRunner runner(CustomerRepository customerRepository) {
+        return args -> {
+            var alex = new Customer("Alex", "alex@gmail.com", 21);
+            var jamila = new Customer("Jamila", "jamila@gmail.com", 19);
+            var customers = List.of(alex, jamila);
+            customerRepository.saveAll(customers);
+        };
+    }
 }

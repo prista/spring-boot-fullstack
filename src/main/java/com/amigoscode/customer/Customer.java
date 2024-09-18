@@ -27,8 +27,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(final Integer id, final String name, final String email, final Integer age) {
-        this.id = id;
+    public Customer(final String name, final String email, final Integer age) {
         this.name = name;
         this.email = email;
         this.age = age;
