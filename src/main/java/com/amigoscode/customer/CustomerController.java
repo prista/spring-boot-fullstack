@@ -22,7 +22,7 @@ public class CustomerController {
 
     @GetMapping(path = "api/v1/customers/{customerId}")
     public Customer getCustomer(
-            @PathVariable("customerId") final Integer customerId) {
+            @PathVariable("customerId") Integer customerId) {
         return customerService.getCustomer(customerId);
     }
 }
