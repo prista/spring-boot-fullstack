@@ -1,7 +1,5 @@
 package com.amigoscode.customer;
 
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -10,4 +8,6 @@ public interface CustomerDao {
     Optional<Customer> selectCustomerById(final Integer id);
     void insertCustomer(Customer customer);
     boolean existsPersonWithEmail(String email);
+    boolean existsPersonWithId(Integer id);
+    void deleteCustomerById(Integer id);
 }
