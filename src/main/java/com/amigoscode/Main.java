@@ -22,7 +22,7 @@ public class Main {
             var alex = new Customer("Alex", "alex@gmail.com", 21);
             var jamila = new Customer("Jamila", "jamila@gmail.com", 19);
             var customers = List.of(alex, jamila);
-            customerRepository.saveAll(customers);
+            //customerRepository.saveAll(customers);
         };
     }
 }
