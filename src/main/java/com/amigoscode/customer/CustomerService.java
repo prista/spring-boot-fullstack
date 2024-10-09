@@ -32,7 +32,7 @@ public class CustomerService {
             CustomerRegistrationRequest customerRegistrationRequest) {
         var email = customerRegistrationRequest.email();
         // check if email exists
-        if (customerDao.existsPersonWithEmail(email)) {
+        if (customerDao.existsCustomerWithEmail(email)) {
             throw new DuplicateResourceException("email already taken");
         }
         // add
@@ -45,7 +45,7 @@ public class CustomerService {
     }
 
     public void deleteCustomerById(Long id) {
-        if (!customerDao.existsPersonWithId(id)) {
+        if (!customerDao.existsCustomerWithId(id)) {
             throw new ResourceNotFoundException(
                     "customer with id [%s] not found".formatted(id)
             );
@@ -71,7 +71,7 @@ public class CustomerService {
         }
 
         if (updateRequest.email() != null && !updateRequest.email().equals(customer.getEmail())) {
-            if (customerDao.existsPersonWithEmail(updateRequest.email())) {
+            if (customerDao.existsCustomerWithEmail(updateRequest.email())) {
                 throw new DuplicateResourceException(
                         "email already taken"
                 );

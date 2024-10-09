@@ -65,7 +65,7 @@ class CustomerServiceTest {
     void addCustomer() {
         // Given
         var email = "alex@gmail.com";
-        when(customerDao.existsPersonWithEmail(email)).thenReturn(false);
+        when(customerDao.existsCustomerWithEmail(email)).thenReturn(false);
         var request = new CustomerRegistrationRequest(
                 "Alex", email, 19
         );
@@ -87,7 +87,7 @@ class CustomerServiceTest {
     void willThrowWhenEmailExistsWhileAddingACustomer() {
         // Given
         var email = "alex@gmail.com";
-        when(customerDao.existsPersonWithEmail(email)).thenReturn(true);
+        when(customerDao.existsCustomerWithEmail(email)).thenReturn(true);
         var request = new CustomerRegistrationRequest(
                 "Alex", email, 19
         );
@@ -105,7 +105,7 @@ class CustomerServiceTest {
     void deleteCustomerById() {
         // Given
         var id = 10L;
-        when(customerDao.existsPersonWithId(id)).thenReturn(true);
+        when(customerDao.existsCustomerWithId(id)).thenReturn(true);
         // When
         underTest.deleteCustomerById(id);
         // Then
@@ -116,7 +116,7 @@ class CustomerServiceTest {
     void willThrowDeleteCustomerByIdNotExist() {
         // Given
         var id = 10L;
-        when(customerDao.existsPersonWithId(id)).thenReturn(false);
+        when(customerDao.existsCustomerWithId(id)).thenReturn(false);
         // When
         assertThatThrownBy(() -> underTest.deleteCustomerById(id))
                 .isInstanceOf(ResourceNotFoundException.class)
@@ -126,6 +126,31 @@ class CustomerServiceTest {
     }
 
     @Test
-    void updateCustomer() {
+    void canUpdateAllCustomersProperties() {
+        // Given
+        var id = 10L;
+        var customer = new Customer(
+                id, "Alex", "alex@gmail.com", 19
+        );
+        when(customerDao.selectCustomerById(id))
+                .thenReturn(Optional.of(customer));
+
+        var newEmail = "alexandro@amigoscode.com";
+        var request = new CustomerUpdateRequest(
+                "Alexandro", newEmail, 23
+        );
+        when(customerDao.existsCustomerWithEmail(newEmail)).thenReturn(false);
+        // When
+        underTest.updateCustomer(id, request);
+        // Then
+        var customerCaptor = ArgumentCaptor.forClass(
+                Customer.class
+        );
+        verify(customerDao).updateCustomer(customerCaptor.capture());
+        var capturedCustomer = customerCaptor.getValue();
+
+        assertThat(capturedCustomer.getName()).isEqualTo(request.name());
+        assertThat(capturedCustomer.getEmail()).isEqualTo(request.email());
+        assertThat(capturedCustomer.getAge()).isEqualTo(request.age());
     }
 }

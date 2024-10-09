@@ -87,7 +87,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         underTest.insertCustomer(customer);
 
         // When
-        var actual = underTest.existsPersonWithEmail(email);
+        var actual = underTest.existsCustomerWithEmail(email);
 
         // Then
         assertThat(actual).isTrue();
@@ -98,7 +98,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         // Given
         var notExistedEmail = FAKER.internet().safeEmailAddress() + "-" + UUID.randomUUID();
         // When
-        var actual = underTest.existsPersonWithEmail(notExistedEmail);
+        var actual = underTest.existsCustomerWithEmail(notExistedEmail);
         // Then
         assertThat(actual).isFalse();
     }
@@ -120,7 +120,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
                 .findFirst()
                 .orElseThrow();
         // When
-        var actual = underTest.existsPersonWithId(id);
+        var actual = underTest.existsCustomerWithId(id);
         // Then
         assertThat(actual).isTrue();
     }
@@ -130,7 +130,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         // Given
         var id = -1L;
         // When
-        var actual = underTest.existsPersonWithId(id);
+        var actual = underTest.existsCustomerWithId(id);
         // Then
         assertThat(actual).isFalse();
     }

@@ -60,21 +60,21 @@ class CustomerJPADataAccessServiceTest {
     }
 
     @Test
-    void existsPersonWithEmail() {
+    void existsCustomerWithEmail() {
         // Given
         var email = "foo@gmail.com";
         // When
-        underTest.existsPersonWithEmail(email);
+        underTest.existsCustomerWithEmail(email);
         // Then
         verify(customerRepository).existsCustomerByEmail(email);
     }
 
     @Test
-    void existsPersonWithId() {
+    void existsCustomerWithId() {
         // Given
         var id = 1L;
         // When
-        underTest.existsPersonWithId(id);
+        underTest.existsCustomerWithId(id);
         // Then
         verify(customerRepository).existsCustomerById(id);
     }
