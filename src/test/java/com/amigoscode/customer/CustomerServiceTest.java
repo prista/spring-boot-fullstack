@@ -1,6 +1,7 @@
 package com.amigoscode.customer;
 
 import com.amigoscode.exception.DuplicateResourceException;
+import com.amigoscode.exception.RequestValidationException;
 import com.amigoscode.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -152,5 +153,132 @@ class CustomerServiceTest {
         assertThat(capturedCustomer.getName()).isEqualTo(request.name());
         assertThat(capturedCustomer.getEmail()).isEqualTo(request.email());
         assertThat(capturedCustomer.getAge()).isEqualTo(request.age());
+    }
+
+    @Test
+    void canUpdateOnlyCustomersName() {
+        // Given
+        var id = 10L;
+        var customer = new Customer(
+                id, "Alex", "alex@gmail.com", 19
+        );
+        when(customerDao.selectCustomerById(id))
+                .thenReturn(Optional.of(customer));
+
+        var request = new CustomerUpdateRequest(
+                "Alexandro", null, null
+        );
+        // When
+        underTest.updateCustomer(id, request);
+        // Then
+        var customerCaptor = ArgumentCaptor.forClass(
+                Customer.class
+        );
+        verify(customerDao).updateCustomer(customerCaptor.capture());
+        var capturedCustomer = customerCaptor.getValue();
+
+        assertThat(capturedCustomer.getName()).isEqualTo(request.name());
+        assertThat(capturedCustomer.getEmail()).isEqualTo(customer.getEmail());
+        assertThat(capturedCustomer.getAge()).isEqualTo(customer.getAge());
+    }
+
+    @Test
+    void canUpdateOnlyCustomersEmail() {
+        // Given
+        var id = 10L;
+        var customer = new Customer(
+                id, "Alex", "alex@gmail.com", 19
+        );
+        when(customerDao.selectCustomerById(id))
+                .thenReturn(Optional.of(customer));
+
+        var newEmail = "alexandro@amigoscode.com";
+        var request = new CustomerUpdateRequest(
+                null, newEmail, null
+        );
+        when(customerDao.existsCustomerWithEmail(newEmail)).thenReturn(false);
+        // When
+        underTest.updateCustomer(id, request);
+        // Then
+        var customerCaptor = ArgumentCaptor.forClass(
+                Customer.class
+        );
+        verify(customerDao).updateCustomer(customerCaptor.capture());
+        var capturedCustomer = customerCaptor.getValue();
+
+        assertThat(capturedCustomer.getName()).isEqualTo(customer.getName());
+        assertThat(capturedCustomer.getEmail()).isEqualTo(newEmail);
+        assertThat(capturedCustomer.getAge()).isEqualTo(customer.getAge());
+    }
+
+    @Test
+    void canUpdateOnlyCustomersAge() {
+        // Given
+        var id = 10L;
+        var customer = new Customer(
+                id, "Alex", "alex@gmail.com", 19
+        );
+        when(customerDao.selectCustomerById(id))
+                .thenReturn(Optional.of(customer));
+
+        var request = new CustomerUpdateRequest(
+                null, null, 22
+        );
+        // When
+        underTest.updateCustomer(id, request);
+        // Then
+        var customerCaptor = ArgumentCaptor.forClass(
+                Customer.class
+        );
+        verify(customerDao).updateCustomer(customerCaptor.capture());
+        var capturedCustomer = customerCaptor.getValue();
+
+        assertThat(capturedCustomer.getName()).isEqualTo(customer.getName());
+        assertThat(capturedCustomer.getEmail()).isEqualTo(customer.getEmail());
+        assertThat(capturedCustomer.getAge()).isEqualTo(request.age());
+    }
+
+    @Test
+    void willThrowWhenTryingToUpdateCustomersEmailWhenAlreadyTaken() {
+        // Given
+        var id = 10L;
+        var customer = new Customer(
+                id, "Alex", "alex@gmail.com", 19
+        );
+        when(customerDao.selectCustomerById(id))
+                .thenReturn(Optional.of(customer));
+
+        var newEmail = "alexandro@amigoscode.com";
+        var request = new CustomerUpdateRequest(
+                null, newEmail, null
+        );
+        when(customerDao.existsCustomerWithEmail(newEmail)).thenReturn(true);
+        // When
+        assertThatThrownBy(() -> underTest.updateCustomer(id, request))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessage("email already taken");
+        // Then
+        verify(customerDao, never()).updateCustomer(any());
+    }
+
+    @Test
+    void willThrowWhenCustomerUpdateHasNoChanges() {
+        // Given
+        var id = 10L;
+        var customer = new Customer(
+                id, "Alex", "alex@gmail.com", 19
+        );
+        when(customerDao.selectCustomerById(id))
+                .thenReturn(Optional.of(customer));
+
+        var request = new CustomerUpdateRequest(
+                customer.getName(), customer.getEmail(), customer.getAge()
+        );
+        // When
+        assertThatThrownBy(() -> underTest.updateCustomer(id, request))
+                .isInstanceOf(RequestValidationException.class)
+                .hasMessage("no data changes found");
+        // Then
+        verify(customerDao, never()).updateCustomer(any());
     }
 }
