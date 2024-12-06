@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
-        // test 2
+        // test 3
     }
 
     @Bean
