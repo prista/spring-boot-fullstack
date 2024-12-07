@@ -14,7 +14,7 @@ import java.util.Random;
 public class Main {
 
     public static void main(String[] args) {
-        // test 6 with username
+        // test 7 with pwd
         SpringApplication.run(Main.class, args);
     }
 

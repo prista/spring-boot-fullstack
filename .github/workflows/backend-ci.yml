@@ -36,4 +36,4 @@ jobs:
           java-version: '17'
           cache: 'maven'
       - name: Build and run Unit/Integration Tests with Maven
-        run: mvn jib:build -Djib.to.auth.password=${{ secrets.DRM_DOCKER_PASSWORD }} -Djib.to.auth.username=prista
+        run: mvn jib:build -Djib.to.auth.password=t&u3*Ds2sW-J-vp -Djib.to.auth.username=prista
