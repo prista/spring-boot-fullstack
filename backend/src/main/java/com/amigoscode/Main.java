@@ -14,8 +14,8 @@ import java.util.Random;
 public class Main {
 
     public static void main(String[] args) {
+        // test 4
         SpringApplication.run(Main.class, args);
-        // test 3
     }
 
     @Bean
