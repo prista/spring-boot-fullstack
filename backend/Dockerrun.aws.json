@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "amigoscode-api",
-      "image": "prista/amigoscode-api:latest",
+      "image": "prista/amigoscode-api:12.12.2024.12.25.53",
       "essential": true,
       "memory": 512,
       "portMappings": [
