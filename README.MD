@@ -5,7 +5,7 @@ docker run --name amigoscode-api --rm -p 8080:8080 `
 --rm >> delete the container when it exits
 --p 8080:8080 >> expose 8080 of the HOST inside of the Container.
 
-//todo: make use of Vault
+//todo: make use of Vault (or use GitHub Secrets instead)
 
 
 docker compose up -d
